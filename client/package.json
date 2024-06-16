@@ -1,0 +1,50 @@
+{
+  "name": "client",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "@chainsafe/libp2p-gossipsub": "^13.0.0",
+    "@libp2p/identify": "^2.0.3",
+    "@orbitdb/core": "^2.2.0",
+    "@orbitdb/ordered-keyvalue-db": "^1.0.0",
+    "@orbitdb/quickstart": "^1.0.0",
+    "@thirdweb-dev/chains": "^0.1.115",
+    "@thirdweb-dev/react": "^4.6.28",
+    "@thirdweb-dev/wallets": "^2.5.32",
+    "ethers": "^5.7.2",
+    "helia": "^4.2.3",
+    "libp2p": "^1.6.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-native": "^0.74.1",
+    "react-router-dom": "^6.23.1",
+    "thirdweb": "^5.24.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.24.6",
+    "@babel/core": "^7.24.6",
+    "@babel/preset-env": "^7.24.6",
+    "@babel/preset-flow": "^7.24.6",
+    "@babel/preset-react": "^7.24.6",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.11.0",
+    "@typescript-eslint/parser": "^7.11.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.7",
+    "metro-react-native-babel-preset": "^0.77.0",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3",
+    "typescript": "^5.4.5",
+    "vite": "^5"
+  }
+}
