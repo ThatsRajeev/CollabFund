@@ -1,0 +1,27 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server",
+    "dev": "nodemon server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@chainsafe/libp2p-gossipsub": "^13.0.0",
+    "@orbitdb/core": "^2.2.0",
+    "blockstore-level": "^1.1.8",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "helia": "^4.2.3",
+    "libp2p": "^1.6.1",
+    "mongodb-memory-server": "^9.3.0",
+    "mongoose": "^8.4.3",
+    "path": "^0.12.7"
+  }
+}

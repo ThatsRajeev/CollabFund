@@ -9,19 +9,14 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
-    "@chainsafe/libp2p-gossipsub": "^13.0.0",
-    "@libp2p/identify": "^2.0.3",
-    "@orbitdb/core": "^2.2.0",
-    "@orbitdb/ordered-keyvalue-db": "^1.0.0",
-    "@orbitdb/quickstart": "^1.0.0",
     "@thirdweb-dev/chains": "^0.1.115",
     "@thirdweb-dev/react": "^4.6.28",
     "@thirdweb-dev/wallets": "^2.5.32",
+    "axios": "^1.7.2",
     "ethers": "^5.7.2",
-    "helia": "^4.2.3",
-    "libp2p": "^1.6.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.4.1",
     "react-native": "^0.74.1",
     "react-router-dom": "^6.23.1",
     "thirdweb": "^5.24.0"
