@@ -3,7 +3,6 @@ const app = express();
 import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import { initOrbitDB } from './orbitdb.js';
 
 import userRouter from './routes/Users.js';
 
@@ -18,9 +17,7 @@ app.use(cors({
 
 app.use('/users', userRouter);
 
-const { orbitdb, ipfs } = await initOrbitDB();
-
-const db = await orbitdb.open('my-user-profiles', { type: 'keyvalue' })
+// const db = await orbitdb.open('my-user-profiles', { type: 'keyvalue' })
 // await db.put('name', 'Rajeev')
 // await db.put('badge', 'newbie')
 // console.log('my-db address', db.address);
