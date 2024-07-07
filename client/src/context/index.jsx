@@ -5,8 +5,9 @@ import { ethers } from 'ethers';
 const StateContext = createContext();
 
 export const StateContextProvider = ({ children }) => {
-    const { contract } = useContract('0xaBfEfD997db2653830AE4BFFBEDdbb4d2969561A');
+    const { contract } = useContract('0x83605CcC2b732f649cdBBD1F55046923eB9d5840');
     const { mutateAsync: CreateCampaign } = useContractWrite(contract, 'createCampaign');
+    const { mutateAsync: EditCampaign } = useContractWrite(contract, 'editCampaign');
 
     const walletConfig = metamaskWallet();
     const connect = useConnect();
@@ -22,21 +23,35 @@ export const StateContextProvider = ({ children }) => {
     }
 
     const publishCampaign = async (form) => {
-        try {
-            const data = await CreateCampaign({
-                args: [
-                    address, // owner
-                    form.title, // title
-                    form.description,  // description
-                    ethers.utils.parseUnits(form.target, 18), // target amount (converted to wei)
-                    new Date(form.deadline).getTime(), // deadline
-                    form.image, // image
-                ],
-            });
-            console.log("contract call success ", data);
-        } catch (error) {
-            console.log("contract call failed ", error);
-        }
+      const milestones = form.mileStones.map((milestone) => milestone.name);
+      const milestoneFunds = form.mileStones.map((milestone) => Number(milestone.funds));
+
+      const totalTarget = milestoneFunds.reduce((partialSum, a) => partialSum + a, 0).toString();
+
+      const data = await CreateCampaign({
+          args: [
+              form.title,
+              form.description,
+              ethers.utils.parseUnits(totalTarget, 18),
+              new Date(form.deadline).getTime(),
+              milestones,
+              milestoneFunds.map(fund => ethers.utils.parseUnits(fund.toString(), 18)),
+              form.category,
+              form.image,
+          ],
+      });
+  }
+
+    const editCampaign = async (pId, form) => {
+      const data = await EditCampaign({
+        args: [
+          pId,
+          form.title,
+          form.description,
+          new Date(form.deadline).getTime(),
+          form.image,
+        ],
+      });
     }
 
     const getCampaigns = async () => {
@@ -50,6 +65,11 @@ export const StateContextProvider = ({ children }) => {
             deadline: campaign.deadline.toNumber(),
             amountCollected: ethers.utils.formatEther
             (campaign.amountCollected.toString()),
+            isActive: campaign.isActive,
+            milestoneIndex: campaign.milestoneIndex,
+            milestones: campaign.milestones,
+            milestoneFunds: campaign.milestoneFunds,
+            category: campaign.category,
             image: campaign.image,
             pId: i
         }));
@@ -90,6 +110,21 @@ export const StateContextProvider = ({ children }) => {
         return parsedDonations;
     }
 
+    const releaseFunds = async (pId) => {
+      const data = await contract.call('releaseFunds', [pId]);
+      return data;
+    }
+
+    const requestRefund = async (pId) => {
+      const data = await contract.call('requestRefund', [pId]);
+      return data;
+    }
+
+    const updateStatus = async (pId, status) => {
+      const data = await contract.call('updateStatus', [pId, status],);
+      return data;
+    }
+
     return (
         <StateContext.Provider
             value={{
@@ -97,10 +132,14 @@ export const StateContextProvider = ({ children }) => {
                 contract,
                 connect : handleConnect,
                 createCampaign: publishCampaign,
+                editCampaign,
                 getCampaigns,
                 getUserCampaigns,
                 donate,
-                getDonations
+                getDonations,
+                releaseFunds,
+                requestRefund,
+                updateStatus,
             }}
         >
             {children}

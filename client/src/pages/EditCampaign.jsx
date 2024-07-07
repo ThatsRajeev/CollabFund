@@ -1,68 +1,48 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { ethers } from 'ethers';
 import toast, { Toaster } from 'react-hot-toast';
 
 import { useStateContext } from '../context';
 import { money, add, remove } from '../assets';
+import moment from 'moment';
 import { CustomButton, FormField, Loader } from '../components';
-import { checkIfImage } from '../utils';
 
-function CreateCampaign() {
+function EditCampaign() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { state } = useLocation();
   const [isLoading, setIsLoading] = useState(false);
-  const { createCampaign } = useStateContext();
+  const { editCampaign } = useStateContext();
   const [form, setForm] = useState({
-    name: '',
-    title: '',
-    description: '',
-    deadline: '',
-    mileStones: [{ name: '', funds: '' }],
-    category: '',
-    image: ''
+    name: state.owner,
+    title: state.title,
+    description: state.description,
+    deadline: moment(new Date(state.deadline)).format("YYYY-MM-DD"),
+    mileStones: state.milestones.map((milestone, index) => ({
+      name: milestone,
+      funds: ethers.utils.formatEther(state.milestoneFunds[index]._hex)
+    })),
+    category: state.category,
+    image: state.image
   });
+
+  useEffect(() => {
+    console.log(form);
+  }, [form])
 
   const handleFormFieldChange = (fieldName, e) => {
     setForm({ ...form, [fieldName]: e.target.value });
   };
 
-  const handleMilestoneChange = (fieldName, e, index) => {
-    const newMileStones = form.mileStones.map((milestone, i) => {
-      if (i === index) {
-        return { ...milestone, [fieldName]: e.target.value };
-      }
-      return milestone;
-    });
-    setForm({ ...form, mileStones: newMileStones });
-  }
-
-  const handleAddMilestone = () => {
-    setForm({ ...form, mileStones: [...form.mileStones, { name: '', funds: '' }] });
-  };
-
-  const handleRemoveMilestone = (index) => {
-    const newMileStones = form.mileStones.filter((_, i) => i !== index);
-    if (newMileStones.length > 0) {
-      setForm({ ...form, mileStones: newMileStones });
-    } else {
-      toast.error('Atleast one milestone required');
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    checkIfImage(form.image, async (exists) => {
-      if (exists) {
-        setIsLoading(true);
-        await createCampaign({ ...form });
-        setIsLoading(false);
-        navigate('/');
-      } else {
-        toast.error('Provide valid image URL');
-        setForm({ ...form, image: '' });
-      }
-    });
+    setIsLoading(true);
+    const urlParts = location.pathname.split('/');
+    const pId = urlParts[2];
+    await editCampaign(pId, { ...form });
+    setIsLoading(false);
+    navigate('/');
   };
 
   return (
@@ -70,16 +50,17 @@ function CreateCampaign() {
       {isLoading && <Loader />}
       <Toaster position="bottom-center" />
       <div className='flex justify-center items-center p-[16px] sm:min-w-[380px] bg-[#3a3a43] rounded-[10px]'>
-        <h1 className='font-epilogue font-bold sm:text-[25px] text-[18px] leading-[38px] text-white'>Start a Campaign</h1>
+        <h1 className='font-epilogue font-bold sm:text-[25px] text-[18px] leading-[38px] text-white'>Edit Campaign</h1>
       </div>
 
       <form onSubmit={handleSubmit} className='w-full mt-[65px] flex flex-col gap-[30px]'>
         <div className='flex md:flex-nowrap flex-wrap gap-[40px]'>
           <FormField
-            labelName="Your Name *"
+            labelName="Your Id *"
             placeholder="John Doe"
             inputType="text"
             value={form.name}
+            disabled={true}
             handleChange={(e) => handleFormFieldChange('name', e)}
           />
           <FormField
@@ -111,30 +92,17 @@ function CreateCampaign() {
               placeholder="Enter a milestone description"
               inputType="text"
               value={milestone.name}
-              handleChange={(e) => handleMilestoneChange('name', e, index)}
+              disabled={true}
             />
             <FormField
               labelName="Milestone Funds *"
               placeholder="ETH 0.50"
               inputType="text"
               value={milestone.funds}
-              handleChange={(e) => handleMilestoneChange('funds', e, index)}
+              disabled={true}
             />
-            <span
-              className={`w-[36px] h-[36px] rounded-full bg-[#2c2f32] flex justify-center items-center cursor-pointer mt-[12px]`}
-              onClick={() => handleRemoveMilestone(index)}
-            >
-              <img src={remove} alt='remove_logo' className='w-1/2 h-1/2' />
-            </span>
           </div>
         ))}
-
-        <div
-          className='w-[48px] h-[48px] rounded-full bg-[#2c2f32] flex justify-center items-center cursor-pointer mb-4'
-          onClick={handleAddMilestone}
-        >
-          <img src={add} alt='add_logo' className='w-1/2 h-1/2' />
-        </div>
 
         <div className='flex flex-wrap md:flex-nowrap gap-[40px]'>
           <FormField
@@ -149,6 +117,7 @@ function CreateCampaign() {
             placeholder="Select a category"
             inputType="select"
             value={form.category}
+            disabled={true}
             handleChange={(e) => handleFormFieldChange('category', e)}
             options={[
               { value: '', label: 'Select a category' },
@@ -170,7 +139,7 @@ function CreateCampaign() {
         <div className="flex justify-center items-center mt-[40px]">
           <CustomButton
             btnType="submit"
-            title="Submit new campaign"
+            title="Save Changes"
             styles="bg-[#1dc071]"
           />
         </div>
@@ -179,4 +148,4 @@ function CreateCampaign() {
   );
 }
 
-export default CreateCampaign;
+export default EditCampaign;

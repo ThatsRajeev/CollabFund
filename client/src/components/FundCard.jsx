@@ -4,7 +4,7 @@ import { tagType, thirdweb } from '../assets'
 import { daysLeft } from '../utils'
 
 const FundCard = ({ owner, title, description, target,
-deadline, amountCollected, image, handleClick}) => {
+deadline, amountCollected, image, category, handleClick}) => {
     const remainingDays = daysLeft(deadline);
 
     return (
@@ -18,7 +18,7 @@ deadline, amountCollected, image, handleClick}) => {
                     <img src={tagType} alt='tag' className='w-[17px] h-[17px]
                     object-contain' />
                     <p className='ml-[12px] mt-[2px] font-epilogue
-                    font-medium text-[12px] text-[#808191]'>Education</p>
+                    font-medium text-[12px] text-[#808191]'>{category}</p>
                 </div>
 
                 <div className='block'>

@@ -71,7 +71,7 @@ function Profile() {
   };
 
   return (
-    <div className="bg-[#1c1c24] flex flex-col md:flex-row rounded-[10px] sm:p-10 p-4 gap-[40px]">
+    <div className="bg-[#141414] flex flex-col md:flex-row rounded-[10px] sm:p-10 p-4 gap-[40px]">
       <Toaster position="bottom-center" />
       <div className="p-4 rounded-lg w-full md:w-1/3">
         {isLoading ? (

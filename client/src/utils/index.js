@@ -1,3 +1,5 @@
+import { ethers } from 'ethers';
+
 export const daysLeft = (deadline) => {
     const difference = new Date(deadline).getTime() - Date.now();
     const remainingDays = difference / (1000 * 3600 * 24);
@@ -33,3 +35,16 @@ export const daysLeft = (deadline) => {
       }
     })
   };
+
+  export const calculateFundsCollected = (amountCollected, milestoneIndex, milestoneFunds) => {
+    const milestoneIdx = Number(milestoneIndex._hex)
+    const fundsWithdrawn = milestoneFunds.reduce((acc, milestone, i) => {
+      if (i < milestoneIdx) {
+        return acc + parseFloat(ethers.utils.formatEther(milestone._hex));
+      }
+      return acc;
+    }, 0);
+    const totalFundsCollected = (parseFloat(amountCollected) + fundsWithdrawn).toFixed(2);
+    
+    return totalFundsCollected;
+  }
