@@ -10,7 +10,7 @@ dotenv.config();
 
 app.use(express.json());
 app.use(cors({
-  origin: ["http://localhost:5173","http://localhost:5174","http://localhost:5175"],
+  origin: ["http://localhost:5173", "https://crowdfunding-frontend-eight.vercel.app"],
   methods: ["POST", "GET", "PATCH", "DELETE"],
   credentials: true,
 }));
