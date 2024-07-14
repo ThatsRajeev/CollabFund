@@ -14,13 +14,14 @@ export const StateContextProvider = ({ children }) => {
     const address = useAddress();
 
     const handleConnect = async () => {
-        try {
-            const wallet = await connect(walletConfig);
-            console.log("connected to", wallet);
-        } catch(e) {
-            console.error("failed to connect", e);
-        }
+    if (typeof window.ethereum === 'undefined') {
+      // Handle MetaMask not installed case
+      console.error("MetaMask not detected. Please install MetaMask to connect.");
+      return;  // Exit the function if MetaMask is not available
     }
+    await connect(walletConfig);
+  }
+
 
     const publishCampaign = async (form) => {
       const milestones = form.mileStones.map((milestone) => milestone.name);

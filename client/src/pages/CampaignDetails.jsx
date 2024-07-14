@@ -36,17 +36,33 @@ function CampaignDetails() {
     if (contract) fetchDonators();
   }, [contract, address]);
 
-  const handleDonate = async () => {
-    setIsLoading(true);
-
-    await donate(state.pId, amount);
-
-    navigate('/');
-    setIsLoading(false);
-  };
-
   const handleEdit = () => {
     navigate(`/edit/${state.pId}`, {state: state});
+  };
+
+  const handleDonate = async () => {
+    setIsLoading(true);
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+
+    const balance = await signer.getBalance();
+    const formattedBalance = (Math.round(balance / 1e18 * 100) / 100).toString();
+
+    if (parseFloat(amount) > formattedBalance) {
+      toast.error("Insufficient funds! Your balance is ETH " + formattedBalance);
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      await donate(state.pId, amount);
+      navigate('/');
+    } catch (error) {
+      console.error("Error donating:", error);
+      toast.error(error.reason);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleStatus = async () => {

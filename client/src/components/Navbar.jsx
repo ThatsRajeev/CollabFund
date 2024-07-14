@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import toast, { Toaster } from 'react-hot-toast';
 
 import { useStateContext } from '../context';
 import { CustomButton } from './';
@@ -15,6 +16,7 @@ function Navbar() {
   return (
     <div className='flex md:flex-row flex-col-reverse
     justify-between mb-[35px] gap-6'>
+      <Toaster position="bottom-center" />
       <div className='lg:flex-1 flex flex-row max-w-[458px]
       py-2 pl-4 pr-2 h-[52px] bg-[#1c1c24] rounded-[100px]'>
         <input type='text' placeholder='Search for campaigns'
@@ -38,6 +40,8 @@ function Navbar() {
           styles={address ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
           handleClick={() => {
             if(address) navigate('create-campaign')
+            else if(typeof window.ethereum === 'undefined')
+              toast.error("MetaMask not detected. Please install MetaMask to connect.")
             else connect()
           }}
         />
