@@ -1,4 +1,4 @@
-# Crowdfunding DApp
+# CollabFund
 
 This project is a decentralized crowdfunding platform built using Solidity for the smart contract, Thirdweb for deployment and interaction, and a React frontend. The platform allows users to create campaigns, donate to campaigns, and manage campaign funds based on predefined milestones.
 
