@@ -39,12 +39,12 @@ This project is a decentralized crowdfunding platform built using Solidity for t
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/ThatsRajeev/Crowdfunding.git
+    git clone https://github.com/ThatsRajeev/CollabFund.git
     ```
 
 2. Navigate to the project directory:
     ```sh
-    cd crowdfunding-dapp
+    cd CollabFund
     ```
 
 3. Install dependencies for both frontend and backend:
